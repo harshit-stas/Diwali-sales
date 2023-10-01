@@ -1,5 +1,3 @@
-Sure, here's a sample README for your code:
-
 # Outlier Analysis
 
 This project provides a script for performing an outlier analysis on a dataset. The script loads a dataset, cleans it, performs an outlier analysis on a specified column, and removes the outliers.
