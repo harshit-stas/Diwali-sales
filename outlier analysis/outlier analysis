@@ -1,0 +1,83 @@
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# Function to clean data
+def clean_data(data):
+    if data is not None:
+        # Fill missing values with the mean
+        data['Amount'].fillna(data['Amount'].mean(), inplace=True)
+        
+        # Drop unnecessary columns
+        data = data.drop(columns=['Status', 'unnamed1'], axis=1)
+    
+    return data
+
+# Function to load data
+def load_data(file_path, encoding='latin'):
+    try:
+        data = pd.read_csv(file_path, encoding=encoding)
+        return data
+    except Exception as e:
+        print(f"Error loading data: {str(e)}")
+        return None
+
+# Function for outliers analysis
+def outliers_analysis(data, column):
+    plt.figure(figsize=(10, 6))
+    
+    # Create a box plot to visualize the distribution of the data
+    sns.boxplot(x=data[column])
+    plt.title(f'Boxplot for {column}')
+    plt.xlabel(column)
+    
+    # Calculate Q1, Q3 and IQR
+    Q1 = data[column].quantile(0.25)
+    Q3 = data[column].quantile(0.75)
+    IQR = Q3 - Q1
+    
+    # Define a threshold for considering values as outliers
+    lower_threshold = Q1 - 1.5 * IQR
+    upper_threshold = Q3 + 1.5 * IQR
+    
+    # Identify and mark outliers
+    outliers = data[(data[column] < lower_threshold) | (data[column] > upper_threshold)]
+    
+    # Print the range of outlier values
+    print(f"Range of outlier values: {outliers[column].min()} to {outliers[column].max()}")
+    
+    for index in outliers.index:
+        plt.annotate(f'Outlier ({data[column][index]:.2f})', xy=(index, data[column][index]), color='red')
+    
+    plt.show()
+    
+    # Remove outliers
+    data_no_outliers = data[(data[column] >= lower_threshold) & (data[column] <= upper_threshold)]
+    
+    return data_no_outliers
+
+# Main function
+def main():
+    file_path = r"C:\Users\hrama\Downloads\Diwali Sales Data.csv"
+    encoding = 'latin'
+    
+    # Load the data
+    data = load_data(file_path, encoding)
+    
+    if data is not None:
+        # Clean the data
+        data = clean_data(data)
+        
+        # Perform an outlier analysis on the 'Amount' column and remove outliers
+        data_no_outliers = outliers_analysis(data, 'Amount')
+        
+        # Create a box plot of data without outliers
+        plt.figure(figsize=(10, 6))
+        sns.boxplot(x=data_no_outliers['Amount'])
+        plt.title('Boxplot for Amount (without outliers)')
+        plt.xlabel('Amount')
+        plt.show()
+main()
