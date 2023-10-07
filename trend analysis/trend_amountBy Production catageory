@@ -1,0 +1,53 @@
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy import stats
+# Function to load data
+def load_data(file_path, encoding='latin'):
+    try:
+        data = pd.read_csv(file_path, encoding=encoding)
+        return data
+    except Exception as e:
+        print(f"Error loading data: {str(e)}")
+        return None
+
+# Function to clean data
+def clean_data(data):
+    if data is not None:
+        # Fill missing values with the mean
+        data['Amount'].fillna(data['Amount'].mean(), inplace=True)
+        
+        # Drop unnecessary columns
+        data = data.drop(columns=['Status', 'unnamed1'], axis=1)
+    
+    return data
+
+
+# Function for outliers analysis
+# Function for trend analysis
+def plot_trend(data):
+    # Group the data by 'Product_Category' and calculate the sum of 'Amount'
+    grouped_data = data.groupby('Product_Category')['Amount'].mean()
+
+    # Plot the trend
+    plt.figure(figsize=(15, 6))
+    plt.plot(grouped_data,marker='o')
+    plt.title('Trend of Amount by Product Category')
+    plt.xlabel('Product Category')
+    plt.ylabel('Total Amount')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+
+# Main function
+def main():
+    file_path = r"C:\Users\hrama\Downloads\Diwali Sales Data.csv"
+    encoding = 'latin'
+    
+    # Load the data
+    data = load_data(file_path, encoding)
+    trend_amountProductCat=plot_trend(data)
+main()
