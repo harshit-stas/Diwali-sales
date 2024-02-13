@@ -1,4 +1,4 @@
-# Outlier Analysis
+ko# Outlier Analysis
 
 This project provides a script for performing an outlier analysis on a dataset. The script loads a dataset, cleans it, performs an outlier analysis on a specified column, and removes the outliers.
 
@@ -28,6 +28,3 @@ The script will load your dataset, clean it, perform an outlier analysis on the 
 - `outliers_analysis(data, column)`: Creates a boxplot for the specified column, calculates the first quartile (Q1), third quartile (Q3), and interquartile range (IQR) of the column, identifies any values that are below Q1 - 1.5*IQR or above Q3 + 1.5*IQR as outliers, prints the range of these outlier values, creates a plot with annotations for each outlier, removes the outliers from the dataset, and returns a new DataFrame that doesn't include these outliers.
 - `main()`: Calls these functions in sequence to load the data, clean it, perform an outlier analysis on the 'Amount' column, and remove the outliers.
 
-## Note
-
-Removing outliers can sometimes result in loss of information. It's important to understand why an outlier has occurred before deciding to remove it.
